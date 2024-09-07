@@ -1,0 +1,44 @@
+@import "../../shared/variable.scss";
+
+.home {
+	&--wrapper {
+		min-height: 100%;
+		width: 100%;
+	}
+
+	&--content {
+		height: 100vh;
+	}
+}
+
+.sidebar-logo {
+	margin: 8px;
+	padding: 4px 8px;
+	font-size: 18px;
+	font-weight: 450;
+	text-align: center;
+	color: white;
+	background: $primary;
+}
+
+nz-sider {
+}
+
+nz-header {
+	background: #fff;
+	padding: 0;
+}
+
+nz-content {
+	margin: 12px 16px;
+}
+
+.inner-content {
+	padding: 24px;
+	height: 100%;
+
+	background: #fff;
+}
+.ant-menu.ant-menu-dark .ant-menu-item-selected {
+	background-color: $primary-active;
+}

@@ -1,0 +1,25 @@
+$primary-dark: #1b5e20; // Dark green
+$primary: #4caf50; // Main primary green
+$primary-medium: #388e3c; // Medium green
+$primary-light: #81c784; // Light green
+$primary-ultra-light: #a5d6a7; // Ultra light green
+$primary-active: #2e7d32; // Active green
+
+$text-size: 16px;
+* {
+	text-decoration: none;
+}
+ul,
+ol {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+button {
+	outline: none;
+	border: none;
+	padding: 4px 8px;
+	border-radius: 8px;
+	transition: 0.1s ease-in;
+}

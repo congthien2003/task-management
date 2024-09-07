@@ -1,0 +1,25 @@
+<div class="overview--wrapper">
+	<div class="overview--header" *ngIf="project != undefined">
+		<h4 class="project--name">{{ project.name }}</h4>
+		<div class="project--status">
+			<p
+				*ngIf="!project.status"
+				class="bg-white text-success border px-2 py-1">
+				Running
+			</p>
+			<p
+				*ngIf="project.status"
+				class="bg-white text-danger border px-2 py-1">
+				Done
+			</p>
+		</div>
+		<div class="project--action">
+			<button>View Detail</button>
+		</div>
+	</div>
+	<div class="overview--main">
+		<div class="project--process">
+			<span>68/100</span>
+		</div>
+	</div>
+</div>

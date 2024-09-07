@@ -1,0 +1,34 @@
+<div class="home--wrapper">
+	<nz-layout>
+		<nz-sider
+			class="home--sidebar"
+			nzCollapsible
+			nzTheme="dark"
+			[(nzCollapsed)]="isCollapsed"
+			[nzTrigger]="null">
+			<div class="sidebar-logo">My projects</div>
+			<ul nz-menu nzTheme="dark" nzMode="inline">
+				<li nz-submenu class="" nzTitle="Personal" nzIcon="user">
+					<ul>
+						<li nz-menu-item>Project 1</li>
+						<li nz-menu-item>Project 2</li>
+						<li nz-menu-item>Project 3</li>
+					</ul>
+				</li>
+				<li nz-submenu nzTitle="Team" nzIcon="team">
+					<ul>
+						<li nz-menu-item>Team 1</li>
+						<li nz-menu-item>Team 2</li>
+					</ul>
+				</li>
+			</ul>
+		</nz-sider>
+		<nz-content class="home--content">
+			<div class="inner-content">
+				Your projects active
+
+				<router-outlet></router-outlet>
+			</div>
+		</nz-content>
+	</nz-layout>
+</div>
