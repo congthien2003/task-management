@@ -1,5 +1,9 @@
 import userRepository from "../repositories/userRepository.js";
 import Result from "../common/Result.js";
+
+import fs from "fs";
+import path from "path";
+
 const getById = async function (req, res) {
 	const id = req?.params?.id ?? "";
 	if (id != "") {
@@ -45,6 +49,30 @@ const getAll = async function (req, res) {
 	});
 };
 
+const uploadImage = async function (req, res) {
+	const { base64, fileName } = req.body;
+
+	// Extract base64 data (skip the metadata part)
+	const base64Data = base64.replace(/^data:([A-Za-z-+/]+);base64,/, "");
+
+	const pathFile = "D:/Code Project/TaskManagement/core/src/assets";
+	// Create a path to save the file
+	const filePath = path.join(pathFile, "images", fileName);
+
+	// Write file to the server
+	fs.writeFile(filePath, base64Data, "base64", (err) => {
+		if (err) {
+			return res
+				.status(500)
+				.send({ message: "File upload failed", error: err });
+		}
+		res.status(200).send({
+			message: "File uploaded successfully",
+			path: filePath,
+		});
+	});
+};
+
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const testGemini = async function (req, res) {
@@ -64,5 +92,6 @@ export default {
 	getById,
 	getAll,
 	getByEmail,
+	uploadImage,
 	testGemini,
 };

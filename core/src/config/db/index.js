@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const urlDeployment =
-	"mongodb+srv://nhoccuthien0538:1IxBSqpbYH1ssSRr@cluster0.w9owtoc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+	"mongodb+srv://nhoccuthien0538:thienvip123@cluster0.w9owtoc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 export default async function connect() {
 	try {
-		await mongoose.connect("mongodb://127.0.0.1/task_management", {
+		await mongoose.connect(urlDeployment, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
 		});

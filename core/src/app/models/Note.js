@@ -16,9 +16,9 @@ const Note = new Schema({
 		ref: "Users",
 		required: true,
 	},
-	project: {
+	board: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "Projects",
+		ref: "Boards",
 		required: true,
 	},
 });

@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 export default function checkToken(req, res, next) {
 	if (
-		req.url.toLowerCase() == "/auth/login" ||
-		req.url.toLowerCase() == "/auth/register"
+		req.url.toLowerCase() == "/api/auth/login" ||
+		req.url.toLowerCase() == "/api/auth/register"
 	) {
 		next();
 		return;

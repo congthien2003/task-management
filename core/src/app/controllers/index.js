@@ -1,3 +1,3 @@
 import authController from "./auth.js";
-import projectController from "./project.js";
-export { authController, projectController };
+import boardController from "./board.js";
+export { authController, boardController };

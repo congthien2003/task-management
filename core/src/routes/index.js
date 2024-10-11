@@ -1,12 +1,12 @@
 import userRouter from "./users.js";
 import authRouter from "./auth.js";
-import projectRouter from "./project.js";
+import boardRouter from "./board.js";
 // import siteRouter from "./site.js";
 
 function route(app) {
-	app.use("/auth", authRouter);
+	app.use("/api/auth", authRouter);
 	app.use("/api/users", userRouter);
-	app.use("/api/projects", projectRouter);
+	app.use("/api/board", boardRouter);
 	// app.use("/", siteRouter);
 }
 

@@ -1,34 +1,29 @@
-<div class="home--wrapper">
-	<nz-layout>
-		<nz-sider
-			class="home--sidebar"
-			nzCollapsible
-			nzTheme="dark"
-			[(nzCollapsed)]="isCollapsed"
-			[nzTrigger]="null">
-			<div class="sidebar-logo">My projects</div>
-			<ul nz-menu nzTheme="dark" nzMode="inline">
-				<li nz-submenu class="" nzTitle="Personal" nzIcon="user">
-					<ul>
-						<li nz-menu-item>Project 1</li>
-						<li nz-menu-item>Project 2</li>
-						<li nz-menu-item>Project 3</li>
-					</ul>
-				</li>
-				<li nz-submenu nzTitle="Team" nzIcon="team">
-					<ul>
-						<li nz-menu-item>Team 1</li>
-						<li nz-menu-item>Team 2</li>
-					</ul>
-				</li>
-			</ul>
-		</nz-sider>
-		<nz-content class="home--content">
-			<div class="inner-content">
-				Your projects active
-
-				<router-outlet></router-outlet>
+<div class="container d-flex align-items-center justify-content-center">
+	<div class="main">
+		<h4 class="text-center fw-bold text-danger">Task Management</h4>
+		<form action="">
+			<div class="mb-3">
+				<label for="email" class="form-label">Email address</label>
+				<input
+					type="email"
+					class="form-control"
+					id="email"
+					placeholder="name@example.com" />
 			</div>
-		</nz-content>
-	</nz-layout>
+			<div class="mb-3">
+				<label for="password" class="form-label">Password</label>
+				<input
+					type="password"
+					class="form-control"
+					id="password"
+					placeholder="name@example.com" />
+			</div>
+			<div class="mb-3">
+				<a href="/auth/register">Sign up</a>
+			</div>
+			<button type="submit" class="btn btn-success d-block w-100">
+				Log in
+			</button>
+		</form>
+	</div>
 </div>

@@ -5,7 +5,6 @@ import bycrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import JwtManage from "../../util/JwtManage.js";
-import UserDTO from "../DTO/UserDTO.js";
 
 const getByEmail = async function (email) {
 	const userExists = await User.findOne({
@@ -17,17 +16,13 @@ const getByEmail = async function (email) {
 
 const getById = async function (id) {
 	const userExists = await User.findById(id);
+	userExists.password = "";
 
 	return userExists ? new UserDTO(userExists) : null;
 };
 
 const getAll = async function () {
 	let userExists = await User.find();
-
-	userExists = userExists.map((e) => {
-		return new UserDTO(e);
-	});
-
 	return userExists ?? null;
 };
 
@@ -41,9 +36,9 @@ const login = async function ({ email, password }) {
 
 		if (isMatched) {
 			const token = JwtManage.generateToken(userExists);
-			const userDTO = new UserDTO(userExists);
+			userExists.password = "";
 			return {
-				...userDTO,
+				userExists,
 				token,
 			};
 		}
@@ -65,15 +60,19 @@ const register = async function ({ email, username, password }) {
 		});
 		await newUser.save();
 		let token = JwtManage.generateToken(newUser);
-		const userDTO = new UserDTO(newUser);
+		newUser.password = "";
+
 		return {
-			...userDTO,
+			newUser,
 			token,
 		};
 	} catch (err) {
 		return err;
 	}
 };
+
+const updateImages = async function () {};
+
 export default {
 	getByEmail,
 	getById,

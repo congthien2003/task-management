@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import mongooseDelete from "mongoose-delete";
-import User from "./User";
 const Schema = mongoose.Schema;
 
 const Task = new Schema({
@@ -22,9 +21,9 @@ const Task = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Users",
 	},
-	projectId: {
+	boardId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "Projects",
+		ref: "Boards",
 		required: true,
 	},
 	attachments: [

@@ -1,0 +1,37 @@
+<div class="container d-flex align-items-center justify-content-center">
+	<div class="main">
+		<h4 class="text-center fw-bold text-danger">Login</h4>
+		<form [formGroup]="formLogin">
+			<div class="mb-3">
+				<label for="email" class="form-label">Email address</label>
+				<input
+					type="email"
+					class="form-control"
+					id="email"
+					formControlName="email"
+					placeholder="name@example.com" />
+			</div>
+			<div class="mb-3">
+				<label for="password" class="form-label">Password</label>
+				<input
+					type="password"
+					class="form-control"
+					id="password"
+					formControlName="password"
+					placeholder="name@example.com" />
+			</div>
+			<div class="mb-3">
+				<a href="/auth/register">Sign up</a>
+			</div>
+		</form>
+		<button
+			type="button"
+			(click)="login($event)"
+			class="btn btn-success d-block w-100">
+			Log in
+		</button>
+	</div>
+
+	<input type="file" (change)="onChangeUpload($event)" />
+	<button class="btn btn-success">Upload</button>
+</div>
