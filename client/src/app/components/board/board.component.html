@@ -1,8 +1,30 @@
-<div class="container">
-	<div class="row">
-		<div class="col-3">
-			<h4>Board Detail</h4>
-		</div>
-		<div class="col-9">content</div>
+<div class="board--wrapper">
+	<div class="board--sidebar">
+		<nav class="sidebar">
+			<h4>
+				Your Boards
+				<span><i class="fa fa-plus" aria-hidden="true"></i></span>
+			</h4>
+
+			<ul>
+				@for (item of listBoard; track $index) {
+				<li
+					routerLink="/board/{{ item._id }}"
+					(click)="selected = $index"
+					[class.active]="selected == $index">
+					{{ item.name }}
+
+					<span
+						><i class="fa fa-user" aria-hidden="true"></i>
+						{{ item.quantity }}
+					</span>
+				</li>
+
+				}
+			</ul>
+		</nav>
+	</div>
+	<div class="board--content">
+		<router-outlet></router-outlet>
 	</div>
 </div>

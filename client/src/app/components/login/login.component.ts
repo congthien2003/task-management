@@ -26,7 +26,6 @@ export class LoginComponent {
 	}
 
 	login($event: any) {
-		console.log(this.formLogin.value);
 		this.service
 			.login(this.formLogin.value.email, this.formLogin.value.password)
 			.subscribe({
@@ -35,7 +34,6 @@ export class LoginComponent {
 						sessionStorage.setItem("token", res.data.user.token);
 						this.router.navigateByUrl("/");
 					}
-					console.log(res);
 				},
 			});
 	}

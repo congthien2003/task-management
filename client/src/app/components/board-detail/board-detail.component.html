@@ -1,0 +1,124 @@
+<div class="board--detail">
+	<div class="header">
+		<h4>{{ board.name }}</h4>
+		<div class="member">
+			<div class="quantity">
+				<i class="fa fa-user-circle" aria-hidden="true"></i>
+				{{ board.quantity }}
+			</div>
+			<button mat-flat-button class="btn-sm">
+				<i class="fa fa-plus" aria-hidden="true"></i>
+				Add member
+			</button>
+		</div>
+	</div>
+
+	<div class="content">
+		<mat-tab-group>
+			<mat-tab label="Overview">
+				<div class="content-tab">
+					<div class="overview">
+						<p>{{ board.name }}</p>
+						<p>Owner: {{ board._idOwner }}</p>
+						<p>Description: {{ board.description }}</p>
+						<p>
+							Status: @if(board.status == 0) {
+							<span class="badge bg-primary">Đang diễn ra</span>
+							} @else {
+							<span class="badge bg-warning">Đã hoàn thành</span>
+							}
+						</p>
+					</div>
+				</div>
+			</mat-tab>
+			<mat-tab label="Task">
+				<div class="content-tab">
+					<div class="list">
+						@for (list of lists; track $index) {
+						<div class="list--wrapper" cdkDropListGroup>
+							<div
+								class="list--header"
+								[ngStyle]="{
+									'border-bottom': '5px solid' + list.color
+								}">
+								<h5>
+									<span class="badge text-black bg-light">{{
+										list.tasks.length
+									}}</span
+									>{{ list.name }}
+								</h5>
+
+								<input
+									class="color-picker"
+									type="color"
+									id="colorPicker{{ $index }}"
+									[(ngModel)]="list.color"
+									title="Choose your color" />
+
+								<button mat-button [matMenuTriggerFor]="menu">
+									<i class="fa-solid fa-bars"></i>
+								</button>
+								<mat-menu #menu="matMenu">
+									<button mat-menu-item>
+										Delete this list
+									</button>
+								</mat-menu>
+							</div>
+							<div
+								class="list--content"
+								cdkDropList
+								[cdkDropListData]="list.tasks"
+								(cdkDropListDropped)="drop($event)"
+								[cdkDropListConnectedTo]="connectedLists">
+								@for (item of list.tasks; track item) {
+								<div class="task" cdkDrag [cdkDragData]="item">
+									<div class="task--header">
+										<span>{{ item.name }}</span>
+									</div>
+									<div class="task--description">
+										<p>{{ item.description }}</p>
+									</div>
+									<div class="task--footer">
+										<span
+											>Created by:
+											{{ item.createBy }}</span
+										>
+										<span
+											>Assigned for:
+											{{ item.assignBy }}</span
+										>
+									</div>
+								</div>
+								}
+								<div class="actions">
+									<button class="btn-add-task">
+										Add new task
+									</button>
+								</div>
+							</div>
+						</div>
+
+						}
+					</div>
+				</div>
+			</mat-tab>
+			<mat-tab label="Note">
+				<div class="pin-note">
+					<h4>Pinned</h4>
+					<div class="list-note">
+						@for (note of notes; track $index) {
+						<div class="note">
+							<h4 class="name">{{ note.name }}</h4>
+							<p class="description">{{ note.description }}</p>
+							<p class="type">{{ note.type }}</p>
+						</div>
+						}
+					</div>
+				</div>
+				<div class="default-note">
+					<div class="list-note"></div>
+				</div>
+			</mat-tab>
+		</mat-tab-group>
+	</div>
+</div>

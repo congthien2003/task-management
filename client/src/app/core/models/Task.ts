@@ -9,6 +9,6 @@ export interface Task {
 	updatedAt: Date;
 	createBy: string;
 	assignBy: string;
-	_idProject: string;
+	_idBoard: string;
 	Attachments: Attachment[];
 }

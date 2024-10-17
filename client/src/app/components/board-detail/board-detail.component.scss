@@ -1,0 +1,182 @@
+@import "../../shared/variable.scss";
+.board {
+	&--detail {
+		.header {
+			background-color: white;
+			padding: 12px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			height: 76px;
+			h4 {
+				margin-bottom: 0;
+				font-weight: 500;
+				font-size: 20px;
+			}
+
+			.member {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+
+				button {
+					border-radius: 8px;
+					font-weight: 400;
+					i {
+						margin-right: 4px;
+						font-size: 12px;
+					}
+				}
+			}
+		}
+		.content {
+			height: calc(100vh - 76px);
+			.content-tab {
+				height: 80vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 8px 12px;
+				.overview {
+					background-color: white;
+					width: 50%;
+					height: 300px;
+					padding: 12px 24px;
+					border-radius: 12px;
+					box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+				}
+
+				.list {
+					min-width: 100%;
+					height: 100%;
+					display: flex;
+					gap: 8px;
+
+					@import "../../shared/variable.scss";
+
+					.list {
+						&--wrapper {
+							width: 250px;
+							height: 35rem;
+							padding: 4px 8px;
+						}
+
+						&--header {
+							display: flex;
+							align-items: center;
+							justify-content: space-between;
+							padding: 2px 12px;
+
+							background-color: white;
+							border-radius: 8px;
+
+							h5 {
+								font-weight: 500;
+								font-size: 18px;
+								margin-bottom: 0;
+							}
+						}
+
+						&--content {
+							display: flex;
+							flex-direction: column;
+							gap: 12px;
+							margin-top: 12px;
+							min-height: 300px;
+
+							.task {
+								height: 200px;
+								border-radius: 8px;
+								padding: 8px 12px;
+								background-color: white;
+								display: flex;
+								justify-content: space-between;
+								flex-direction: column;
+								transition: all 0.2s ease-in;
+								&--header {
+									span {
+										font-weight: 500;
+									}
+								}
+
+								&--description {
+									p {
+										font-size: 14px;
+										color: #7a7a7a;
+									}
+								}
+
+								&--footer {
+									display: flex;
+									flex-direction: column;
+									span {
+										font-size: 12px;
+									}
+								}
+							}
+
+							.actions {
+								display: flex;
+								align-items: center;
+								justify-content: center;
+								.btn-add-task {
+									padding: 4px 12px;
+									border: 1px solid $primary;
+									color: $primary;
+									background-color: white;
+									border-radius: 8px;
+									font-size: 16px;
+									&:hover {
+										color: white;
+										background-color: $primary;
+									}
+								}
+							}
+						}
+					}
+
+					.pin-note {
+
+					}
+				}
+			}
+		}
+	}
+}
+
+.color-picker {
+	width: 25px;
+	height: 25px;
+	outline: none;
+	border: none;
+}
+
+.cdk-drag-preview {
+	background-color: rgba(255, 255, 255, 0.9); /* Làm nền sáng */
+	border-radius: 5px;
+	box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Thêm đổ bóng */
+	transform: rotate(5deg); /* Tạo hiệu ứng nghiêng */
+	padding: 10px;
+	opacity: 0.8;
+}
+
+.cdk-drag-placeholder {
+	background-color: rgba(200, 200, 200, 0.5); /* Màu xám nhạt để phân biệt */
+	border: 2px dashed #888; /* Viền nét đứt */
+	min-height: 50px; /* Đặt chiều cao tối thiểu */
+}
+
+.cdk-drop-list-dragging {
+	background-color: rgba(
+		0,
+		123,
+		255,
+		0.1
+	); /* Làm nền của danh sách nhạt hơn */
+	transition: background-color 0.2s ease-in-out;
+}
+
+.cdk-drop-list-receiving {
+	border: 2px solid #007bff; /* Thêm viền màu xanh dương khi đang nhận */
+	background-color: rgba(0, 123, 255, 0.05); /* Thêm hiệu ứng nền */
+}

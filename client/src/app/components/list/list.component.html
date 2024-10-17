@@ -1,1 +1,26 @@
-<p>list works!</p>
+<div class="list--wrapper">
+	<div class="list--header">
+		<h5>{{ list.name }}</h5>
+		<span class="badge text-black bg-light">{{ list.tasks.length }}</span>
+		<i class="fa-solid fa-bars"></i>
+	</div>
+	<div class="list--content">
+		@for (item of list.tasks; track $index) {
+		<div class="task">
+			<div class="task--header">
+				<span>{{ item.name }}</span>
+			</div>
+			<div class="task--description">
+				<p>{{ item.description }}</p>
+			</div>
+			<div class="task--footer">
+				<span>Created by: {{ item.createBy }}</span>
+				<span>Assigned for: {{ item.assignBy }}</span>
+			</div>
+		</div>
+		}
+		<div class="actions">
+			<button class="btn-add-task">Add new task</button>
+		</div>
+	</div>
+</div>
