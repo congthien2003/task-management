@@ -25,8 +25,8 @@ dotenv.config();
 const app = express();
 app.use(cors(corsOptions));
 const PORT = process.env.PORT || 3000;
-app.use("/static", express.static(path.join(__dirname, "public")));
-
+//app.use("/static", express.static(path.join(__dirname, "public")));
+app.use("/static", express.static(path.join(__dirname, "assets/files")));
 // app.use(checkToken);
 app.use(express.json());
 

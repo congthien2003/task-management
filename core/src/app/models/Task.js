@@ -10,29 +10,45 @@ const Task = new Schema({
 		enum: ["Pending", "In Progress", "Completed"],
 		default: "Pending",
 	},
-	createAt: { type: Date, default: Date.now },
-	updateAt: { type: Date, default: Date.now },
 	createdBy: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Users",
 		required: true,
 	},
-	assignBy: {
+<<<<<<< .mine
+	createAt: { type: Date, default: Date.now },
+	updateAt: { type: Date, default: Date.now },
+	createdBy: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Users",
-	},
+
+
+
+
+=======
+	assignBy: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Users",
+		},
+	],
 	boardId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Boards",
+>>>>>>> .theirs
 		required: true,
 	},
-	attachments: [
+	permited: [
 		{
-			fileName: { type: String, required: true },
-			fileUrl: { type: String, required: true }, // Store file URL or path
-			fileType: { type: String }, // e.g., .txt, .docx, etc.
+			email: { type: String}
 		},
 	],
+	listId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Lists",
+		required: true,
+	},
+	
 });
 
 Task.plugin(mongooseDelete);

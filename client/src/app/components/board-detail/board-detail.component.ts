@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Board } from "../../core/models/Board";
 
@@ -17,12 +17,21 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { MatMenuModule } from "@angular/material/menu";
 import { Note } from "../../core/models/Note";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { FormEditComponent } from "../students/form-edit/form-edit.component";
+import { AddMemberComponent } from "../add-member/add-member.component";
+import { AddNoteComponent } from "../note/add-note/add-note.component";
+import { FormAddComponent } from "../task/form-add/form-add.component";
+import { Task } from "../../core/models/Task";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 const MatImport = [
 	MatButtonModule,
 	MatTabsModule,
+	MatDialogModule,
 	CdkDropList,
 	CdkDrag,
 	MatMenuModule,
+	MatProgressBarModule,
 ];
 
 @Component({
@@ -115,17 +124,128 @@ export class BoardDetailComponent implements OnInit {
 		},
 	];
 
+	typeColor: any[] = [
+		{
+			type: "Pending",
+			color: "red",
+		},
+	];
+
 	notes: Note[] = [
 		{
 			name: "Note 1",
 			description: "Note 1 for Back-end",
 			type: "Pending",
+			pinned: true,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			createdBy: "123",
 			_idProject: "1",
+			_id: "1",
+		},
+		{
+			name: "Note 1",
+			description: "Note 1 for Back-end",
+			type: "Pending",
+			pinned: false,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			createdBy: "123",
+			_idProject: "1",
+			_id: "2",
+		},
+		{
+			name: "Note 1",
+			description: "Note 1 for Back-end",
+			type: "Pending",
+			pinned: true,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			createdBy: "123",
+			_idProject: "1",
+			_id: "3",
+		},
+		{
+			name: "Note 1",
+			description: "Note 1 for Back-end",
+			type: "Pending",
+			pinned: false,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			createdBy: "123",
+			_idProject: "1",
+			_id: "4",
+		},
+		{
+			name: "Note 1",
+			description: "Note 1 for Back-end",
+			type: "Pending",
+			pinned: true,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			createdBy: "123",
+			_idProject: "1",
+			_id: "",
+		},
+		{
+			name: "Note 1",
+			description: "Note 1 for Back-end",
+			type: "Pending",
+			pinned: false,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			createdBy: "123",
+			_idProject: "1",
+			_id: "",
+		},
+		{
+			name: "Note 1",
+			description: "Note 1 for Back-end",
+			type: "Pending",
+			pinned: true,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			createdBy: "123",
+			_idProject: "1",
+			_id: "",
+		},
+		{
+			name: "Note 1",
+			description: "Note 1 for Back-end",
+			type: "Pending",
+			pinned: true,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			createdBy: "123",
+			_idProject: "1",
+			_id: "",
+		},
+		{
+			name: "Note 1",
+			description: "Note 1 for Back-end",
+			type: "Pending",
+			pinned: true,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			createdBy: "123",
+			_idProject: "1",
+			_id: "",
+		},
+		{
+			name: "Note 1",
+			description: "Note 1 for Back-end",
+			type: "Pending",
+			pinned: true,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			createdBy: "123",
+			_idProject: "1",
+			_id: "",
 		},
 	];
+
+	pinnedNotes: Note[] = [];
+	defaultNotes: Note[] = [];
 
 	// Mảng chứa ID của tất cả các list để kết nối
 	// Sửa tên cho đúng connected by Sabo
@@ -138,6 +258,7 @@ export class BoardDetailComponent implements OnInit {
 		this.activedRoute.params.subscribe((value) => {
 			console.log(value["id"]);
 		});
+		this.loadListNotes();
 	}
 
 	drop(event: CdkDragDrop<any[]>) {
@@ -165,5 +286,91 @@ export class BoardDetailComponent implements OnInit {
 				event.currentIndex
 			);
 		}
+	}
+
+	//! BOARD FUNCTION
+	readonly dialog = inject(MatDialog);
+	openDialogAddMember() {
+		const dialogRef = this.dialog.open(AddMemberComponent);
+
+		dialogRef.afterClosed().subscribe((result) => {
+			console.log("The dialog was closed");
+			if (result) {
+				console.log("added");
+			}
+		});
+	}
+
+	//! LIST FUNCTION
+
+	EditingNameList: boolean = false;
+	nameList: string = "";
+	editList(list: List): void {}
+
+	deleteList(_id: string): void {
+		console.log(_id);
+	}
+
+	addTask(): void {
+		const dialogRef = this.dialog.open(FormAddComponent);
+
+		dialogRef.afterClosed().subscribe((result) => {
+			console.log("The dialog was closed");
+			if (result) {
+				console.log("added");
+			}
+		});
+	}
+
+	editTask(task: Task): void {
+		const dialogRef = this.dialog.open(FormAddComponent, {
+			data: {
+				task,
+			},
+		});
+
+		dialogRef.afterClosed().subscribe((result) => {
+			console.log("The dialog was closed");
+			if (result) {
+				console.log("added");
+			}
+		});
+	}
+
+	//! NOTE FUNCTION
+
+	loadListNotes(): void {
+		this.pinnedNotes = this.notes.filter((e) => e.pinned === true);
+		this.defaultNotes = this.notes.filter((e) => e.pinned === false);
+	}
+
+	addNote(): void {
+		const dialogRef = this.dialog.open(AddNoteComponent);
+
+		dialogRef.afterClosed().subscribe((result) => {
+			console.log("The dialog was closed");
+			if (result) {
+				console.log("added");
+			}
+		});
+	}
+
+	editNote(note: Note) {
+		const dialogRef = this.dialog.open(AddNoteComponent, {
+			data: {
+				note,
+			},
+		});
+
+		dialogRef.afterClosed().subscribe((result) => {
+			console.log("The dialog was closed");
+			if (result) {
+				console.log("added");
+			}
+		});
+	}
+
+	pinHandle(id: string): void {
+		console.log("pin note");
 	}
 }

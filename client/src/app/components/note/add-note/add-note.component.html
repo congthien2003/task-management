@@ -1,0 +1,32 @@
+<div class="form-add-note">
+	<h4>@if (isEdit) { Edit note } @else { Add new note }</h4>
+	<form [formGroup]="form">
+		<div class="mb-3">
+			<label for="name">Name</label>
+			<input
+				class="form-control"
+				type="text"
+				id="name"
+				formControlName="name" />
+		</div>
+		<div class="mb-3">
+			<label for="description">Description</label>
+			<input
+				class="form-control"
+				type="text"
+				id="description"
+				formControlName="description" />
+		</div>
+		<div class="mb-3">
+			<label for="type">Type</label>
+			<input
+				class="form-control"
+				type="text"
+				id="type"
+				formControlName="type" />
+		</div>
+		<button mat-flat-button class="w-100" (click)="submit()">
+			@if (isEdit) { Save } @else { Add }
+		</button>
+	</form>
+</div>

@@ -1,0 +1,80 @@
+<div class="layout">
+	<div class="container">
+		<div class="header">
+			<h4>List Students</h4>
+			<button mat-flat-button color="primary" (click)="openAdd()">
+				Add new student
+			</button>
+		</div>
+		<div class="list--student">
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Name</th>
+						<th scope="col">Age</th>
+						<th scope="col">-</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for (student of students; track $index) {
+					<tr>
+						@if (student.avartar) {
+						<th scope="row">
+							<img
+								width="100px"
+								height="100px"
+								src="http://localhost:3000/assets/images/{{
+									student.avartar
+								}}"
+								alt="" />
+						</th>
+						} @else {
+						<th scope="row">
+							<img src="" alt="avt" />
+						</th>
+						}
+
+						<td>{{ student.name }}</td>
+						<td>{{ student.age }}</td>
+						<td class="btn-actions">
+							<button
+								mat-raised-button
+								color="primary"
+								(click)="openEdit(student._id)">
+								Update
+							</button>
+							<button
+								mat-raised-button
+								color="warn"
+								(click)="openDelete(student._id)">
+								Delete
+							</button>
+						</td>
+					</tr>
+					}
+				</tbody>
+			</table>
+			<div class="pagination-container">
+				<!-- Nút Previous -->
+				<button
+					(click)="goToPreviousPage()"
+					[disabled]="!hasPrev"
+					class="btn btn-sm btn-primary">
+					Previous
+				</button>
+
+				<!-- Hiển thị trang hiện tại -->
+				<span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+				<!-- Nút Next -->
+				<button
+					(click)="goToNextPage()"
+					[disabled]="!hasNext"
+					class="btn btn-sm btn-primary">
+					Next
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

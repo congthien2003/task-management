@@ -1,0 +1,15 @@
+<div class="form-add-member">
+	<h4>Add new member</h4>
+	<form>
+		<div class="mb-3">
+			<label for="email">Email</label>
+			<input
+				class="form-control"
+				type="email"
+				id="email"
+				(change)="(mailInput)"
+				[(value)]="mailInput" />
+		</div>
+		<button class="btn btn-primary w-100" (click)="invite()">Invite</button>
+	</form>
+</div>

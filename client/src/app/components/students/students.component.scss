@@ -1,0 +1,41 @@
+.layout {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.table {
+		img {
+		}
+		.btn-actions {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+	}
+}
+.pagination-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+
+button {
+	padding: 10px 15px;
+	font-size: 14px;
+}
+
+button:disabled {
+	background-color: #ccc;
+	cursor: not-allowed;
+}
+
+span {
+	font-size: 14px;
+	font-weight: bold;
+}

@@ -20,8 +20,6 @@
 				gap: 8px;
 
 				button {
-					border-radius: 8px;
-					font-weight: 400;
 					i {
 						margin-right: 4px;
 						font-size: 12px;
@@ -44,6 +42,24 @@
 					padding: 12px 24px;
 					border-radius: 12px;
 					box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+					h4 {
+						font-weight: 450;
+					}
+
+					.board-progress {
+						margin-top: 4px;
+					}
+					.description {
+						margin-top: 8px;
+						color: #707070;
+					}
+					.counting {
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						font-weight: 450;
+					}
 				}
 
 				.list {
@@ -134,13 +150,88 @@
 							}
 						}
 					}
+				}
+				.note--wrapper {
+					width: 100%;
+					height: 100%;
+					display: flex;
+					flex-direction: column;
+					gap: 12px;
+				}
+				.note--header {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+				}
+				.pin-note {
+					h3 {
+						font-size: 18px;
+						font-weight: 450;
+					}
 
-					.pin-note {
+					.list-note-pinned {
+						overflow-x: auto; /* Enable horizontal scroll */
+						white-space: nowrap;
+						scrollbar-width: thin;
+						padding: 8px 0;
+						scrollbar-color: #888 #f1f1f1;
+						.note {
+							margin-right: 24px;
+						}
+					}
+				}
+				.default-note {
+					h3 {
+						font-size: 18px;
+						font-weight: 450;
+					}
 
+					.list-note-default {
+						display: grid;
+						grid-template-columns: auto auto auto auto;
+						align-items: center;
+						flex-wrap: wrap;
+						gap: 24px;
+					}
+				}
+				.note {
+					display: inline-block;
+					min-width: 200px;
+					border-radius: 8px;
+					padding: 8px;
+
+					background-color: rgb(247, 245, 102);
+					.name {
+						font-size: 16px;
+						font-weight: 500;
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+
+						span {
+							i {
+								transform: rotate(45deg);
+								transition: 0.2s ease-in;
+							}
+
+							&:hover i {
+								transform: scale(130%) rotate(0deg);
+								opacity: 0.9;
+							}
+						}
 					}
 				}
 			}
 		}
+	}
+}
+
+.dropdown-item {
+	font-weight: 450;
+	font-size: 14px;
+	transition: 0.15s ease-in;
+	&:hover {
+		background-color: #ebebeb;
 	}
 }
 

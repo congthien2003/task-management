@@ -1,0 +1,44 @@
+<div class="form-add-task">
+	<h4>@if (isEdit) { Edit task } @else { Add new task }</h4>
+	<form [formGroup]="form">
+		<div class="mb-3">
+			<label for="name">Name</label>
+			<input
+				class="form-control"
+				type="text"
+				id="name"
+				formControlName="name" />
+		</div>
+		<div class="mb-3">
+			<label for="description">Description</label>
+			<input
+				class="form-control"
+				type="text"
+				id="description"
+				formControlName="description" />
+		</div>
+		<div class="mb-3">
+			<label>Type</label>
+			<select>
+				@for (type of listType; track $index) {
+				<option [value]="type">{{ type }}</option>
+				}
+			</select>
+		</div>
+		<div class="mb-3">
+			<label>Attachment</label>
+			<input class="form-control" type="file" formControlName="file" />
+		</div>
+		<div class="mb-3">
+			<label>Assign for:</label>
+			<select>
+				@for (email of listEmail; track $index) {
+				<option [value]="email">{{ email }}</option>
+				}
+			</select>
+		</div>
+		<button mat-flat-button class="w-100" (click)="submit()">
+			@if (isEdit) { Save } @else { Add }
+		</button>
+	</form>
+</div>
