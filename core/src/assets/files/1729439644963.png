@@ -1,0 +1,12 @@
+{
+    "name": "Task 1",
+    "description": "This is a sample task",
+    "status": "Pending",
+    "userId": "652a4a50b84e9f16d4f3e681",  
+    "listId": "652a4a50b84e9f16d4f3e682",    
+    "permited": [
+        {
+            "email": "user@example.com"
+        }
+    ]
+}

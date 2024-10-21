@@ -1,5 +1,6 @@
 import boardRepository from "../repositories/boardRepository.js";
 import Result from "../common/Result.js";
+
 const getAll = async function (req, res) {
 	try {
 		const listboard = await boardRepository.getAll();
