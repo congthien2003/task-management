@@ -10,6 +10,11 @@ const Task = new Schema({
 		enum: ["Pending", "In Progress", "Completed"],
 		default: "Pending",
 	},
+	createdBy: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Users",
+		required: true,
+	},
 	createAt: { type: Date, default: Date.now },
 	updateAt: { type: Date, default: Date.now },
 	createdBy: {
@@ -17,22 +22,17 @@ const Task = new Schema({
 		ref: "Users",
 		required: true,
 	},
-	assignBy: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Users",
-	},
-	boardId: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Boards",
-		required: true,
-	},
-	attachments: [
+	permited: [
 		{
-			fileName: { type: String, required: true },
-			fileUrl: { type: String, required: true }, // Store file URL or path
-			fileType: { type: String }, // e.g., .txt, .docx, etc.
+			email: { type: String}
 		},
 	],
+	listId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Lists",
+		required: true,
+	},
+	
 });
 
 Task.plugin(mongooseDelete);

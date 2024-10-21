@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 import mongooseDelete from "mongoose-delete";
-import User from "./User";
+// import User from "./User"
 const Schema = mongoose.Schema;
 
 const List = new Schema({
 	name: { type: String, required: true },
 	description: { type: String },
+	color: { type: String},
 	createAt: { type: Date, default: Date.now },
 	updateAt: { type: Date, default: Date.now },
 	createdBy: {
