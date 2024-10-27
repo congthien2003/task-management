@@ -1,5 +1,5 @@
 import { body, validationResult } from "express-validator";
-import userRepository from "../repositories/userRepository.js";
+import userServices from "../services/userServices.js";
 import Result from "../common/Result.js";
 
 const login = async (req, res) => {
@@ -11,14 +11,14 @@ const login = async (req, res) => {
 	}
 	const { email, password } = req.body;
 
-	const userExists = await userRepository.login({ email, password });
+	const userExists = await userServices.login({ email, password });
 
 	if (userExists) {
 		res.status(200).json(
 			new Result({ user: userExists }, "Login success", true)
 		);
 	} else {
-		res.status(400).json(new Result(null, "Login failed", true));
+		res.status(400).json(new Result(null, "Login failed", false));
 	}
 };
 
@@ -31,13 +31,13 @@ const register = async (req, res) => {
 	}
 	const { email, username, password } = req.body;
 
-	const userExists = await userRepository.getByEmail(email);
+	const userExists = await userServices.getByEmail(email);
 	if (userExists) {
 		return res
 			.status(400)
 			.json(new Result(null, "This email has already used.", false));
 	}
-	const register = await userRepository.register({
+	const register = await userServices.register({
 		email,
 		username,
 		password,

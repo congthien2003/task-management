@@ -1,11 +1,16 @@
-import attachmentRepository from "../repositories/attachmentRepository.js";
+import attachmentServices from "../services/attachmentServices.js";
 import Result from "../common/Result.js";
-import { getFilename } from "../../util/getFilename.js"
-import { promises as fsProm } from 'fs'; 
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { getFilename } from "../../util/getFilename.js";
 
+// Thư mục lưu file (nên cấu hình nơi lưu file phù hợp)
+const UPLOADS_DIR =
+	"D://Code Project\\TaskManagement\\core\\src\\assets\\files";
 const getAll = async function (req, res) {
 	try {
-		const attachments = await attachmentRepository.getAll();
+		const attachments = await attachmentServices.getAll();
 		res.status(200).json(
 			new Result(
 				{
@@ -22,9 +27,11 @@ const getAll = async function (req, res) {
 
 const getAllByIdTask = async function (req, res) {
 	try {
-		const attachments = await attachmentRepository.getAllByIdTask(
+		const attachments = await attachmentServices.getAllByIdTask(
 			req.params?.idTask
 		);
+		console.log(req.params?.idTask);
+
 		res.status(200).json({
 			message: "GET by ID Task",
 			data: {
@@ -41,7 +48,9 @@ const getAllByIdTask = async function (req, res) {
 
 const getById = async function (req, res) {
 	try {
-		const existsAttachment = await attachmentRepository.getById(req.params?.id);
+		const existsAttachment = await attachmentServices.getById(
+			req.params?.id
+		);
 		if (existsAttachment != null) {
 			res.status(200).json({
 				message: "success",
@@ -63,55 +72,48 @@ const getById = async function (req, res) {
 	}
 };
 
+const create = async (req, res) => {
+	try {
+		const taskId = req.params.id;
+		const { base64, fileName } = req.body;
 
-const create = async function (req, res) {
-	
-	
-	// Kiểm tra kiểu file hợp lệ
-	const validFileTypes = [
-		"image/jpeg", 
-		"image/png", 
-		"text/plain", 
-		"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-	];
-	if (!validFileTypes.includes(req.headers["content-type"])) {
-		return res.status(400).json({
-			status: "error",
-			message: "Invalid file"
-		});
-	}
-	const fileName = getFilename(req.header("Content-type")),
-		filePath = "D:/OneDrive/Hutech/subjectNew/PTNN/task-management/core/src/assets/files/" + fileName,
-		path = "/static/" + fileName;
-	
-	const newAttachment = await attachmentRepository.create(req.params.id.trim(), fileName, path);
-
-	if (newAttachment != null) {
-		try{
-			// Ghi file lên đĩa
-			await fsProm.writeFile(filePath, req.body);
-		}catch(error){
-			return res.status(500).json({
-				status: "error",
-				message: "Error writing file to disk",
-				error,
-			});
+		if (!taskId || !base64 || !fileName) {
+			return res.status(400).json({ message: "Missing required fields" });
 		}
-		res.status(200).json({
-			message: "create",
-			data: {
-				list: newAttachment,
-			},
+
+		// Tách phần header và dữ liệu base64
+		const matches = base64.match(/^data:(.+);base64,(.+)$/);
+		if (!matches || matches.length !== 3) {
+			return res.status(400).json({ message: "Invalid base64 format" });
+		}
+
+		const fileData = matches[2]; // Lấy phần dữ liệu base64
+		const buffer = Buffer.from(fileData, "base64"); // Chuyển base64 thành Buffer
+
+		const filePath = path.join(UPLOADS_DIR, fileName);
+
+		// Ghi file vào hệ thống
+		fs.writeFileSync(filePath, buffer);
+
+		// Lưu thông tin vào database
+		const savedAttachment = await attachmentServices.create({
+			taskId,
+			filePath,
+			fileName,
 		});
-	} else {
-		res.status(400).json({
-			message: "error",
-			data: {},
+
+		res.status(201).json({
+			message: "Attachment created successfully",
+			data: savedAttachment,
 		});
+	} catch (error) {
+		console.error("Error creating attachment:", error);
+		res.status(500).json({ message: "Internal server error" });
 	}
 };
+
 const deleteById = async function (req, res) {
-	const deleteSuccess = await attachmentRepository.deleteById(req.params?.id);
+	const deleteSuccess = await attachmentServices.deleteById(req.params?.id);
 	if (deleteSuccess.deletedCount > 0) {
 		res.status(200).json({
 			message: "Delete successful",
@@ -123,11 +125,34 @@ const deleteById = async function (req, res) {
 		});
 	}
 };
+
+// Controller để xử lý yêu cầu tải file
+const downloadFile = (req, res) => {
+	const fileName = req.query.filename; // Lấy tên file từ query params
+	console.log(req.query.fileName);
+	// Get the filename and directory name in ES modules
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = path.dirname(__filename);
+	if (!fileName) {
+		return res.status(400).send({ message: "Filename is required!" });
+	}
+
+	const directoryPath = path.join(__dirname, "../../assets/files/"); // Thư mục chứa file
+	const filePath = path.join(directoryPath, fileName);
+
+	res.download(filePath, fileName, (err) => {
+		if (err) {
+			console.error(`Error downloading file: ${err.message}`);
+			res.status(500).send({ message: "Unable to download the file." });
+		}
+	});
+};
+
 export default {
-	
 	create,
 	getAll,
 	getAllByIdTask,
 	getById,
-	deleteById
+	deleteById,
+	downloadFile,
 };

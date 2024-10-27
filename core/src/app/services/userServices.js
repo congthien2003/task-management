@@ -1,4 +1,4 @@
-import User from "../models/User.js";
+import User from "../entity/User.js";
 
 import bycrypt from "bcrypt";
 
@@ -18,7 +18,7 @@ const getById = async function (id) {
 	const userExists = await User.findById(id);
 	userExists.password = "";
 
-	return userExists ? new UserDTO(userExists) : null;
+	return userExists ?? null;
 };
 
 const getAll = async function () {

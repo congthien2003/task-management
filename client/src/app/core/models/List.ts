@@ -7,6 +7,6 @@ export interface List {
 	_idBoard: string;
 	createdAt: Date;
 	color: string;
-	_idOwner: string;
+	createdBy: string;
 	tasks: Task[];
 }

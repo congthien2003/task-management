@@ -5,15 +5,13 @@ const Schema = mongoose.Schema;
 
 const Attachment = new Schema({
 	filePath: { type: String, required: true },
-	fileName: { type: String, required: true},
-	createAt: { type: Date, default: Date.now },
-	updateAt: { type: Date, default: Date.now },
+	fileName: { type: String, required: true },
 	taskId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Tasks",
-		required: true,
 	},
-	
+	createAt: { type: Date, default: Date.now },
+	updateAt: { type: Date, default: Date.now },
 });
 
 Attachment.plugin(mongooseDelete);

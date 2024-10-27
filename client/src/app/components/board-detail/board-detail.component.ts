@@ -5,7 +5,6 @@ import { Board } from "../../core/models/Board";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTabsModule } from "@angular/material/tabs";
 import { List } from "../../core/models/List";
-import { ListComponent } from "../list/list.component";
 import {
 	CdkDragDrop,
 	moveItemInArray,
@@ -24,6 +23,13 @@ import { AddNoteComponent } from "../note/add-note/add-note.component";
 import { FormAddComponent } from "../task/form-add/form-add.component";
 import { Task } from "../../core/models/Task";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { BoardService } from "../../core/services/board.service";
+import { ListService } from "../../core/services/list.service";
+import { TaskService } from "../../core/services/task.service";
+import { AuthService } from "../../core/services/auth.service";
+import { User } from "../../core/models/User";
+import { UserService } from "../../core/services/user.service";
+import { forkJoin } from "rxjs";
 const MatImport = [
 	MatButtonModule,
 	MatTabsModule,
@@ -37,18 +43,21 @@ const MatImport = [
 @Component({
 	selector: "app-board-detail",
 	standalone: true,
-	imports: [MatImport, ListComponent, CommonModule, FormsModule],
+	imports: [MatImport, CommonModule, FormsModule],
 	templateUrl: "./board-detail.component.html",
 	styleUrl: "./board-detail.component.scss",
 })
 export class BoardDetailComponent implements OnInit {
+	idBoard: string = "";
 	board: Board = {
 		_id: "1",
 		name: "Board 1",
-		_idOwner: "123",
+		owner: "123",
 		description: "Project",
 		quantity: 3,
 		status: 0,
+		list: [],
+		members: [],
 	};
 
 	lists: List[] = [
@@ -58,7 +67,7 @@ export class BoardDetailComponent implements OnInit {
 			deleted: false,
 			_idBoard: "1",
 			createdAt: new Date(),
-			_idOwner: "123",
+			createdBy: "123",
 			color: "#563d7c",
 			tasks: [
 				{
@@ -69,60 +78,49 @@ export class BoardDetailComponent implements OnInit {
 					createdAt: new Date(),
 					updatedAt: new Date(),
 					createBy: "123",
-					assignBy: "123",
-					_idBoard: "1",
-					Attachments: [],
-				},
-				{
-					_id: "2",
-					name: "Task 2",
-					description: "Task 2 for Front-end",
-					status: "Proccess",
-					createdAt: new Date(),
-					updatedAt: new Date(),
-					createBy: "123",
-					assignBy: "123",
-					_idBoard: "1",
-					Attachments: [],
+					permitted: [
+						{
+							email: "abc",
+							_id: "123",
+						},
+					],
+					listId: "1",
+					attachments: [],
 				},
 			],
 		},
 		{
-			_id: "2",
-			name: "Done",
+			_id: "1",
+			name: "To do",
 			deleted: false,
 			_idBoard: "1",
 			createdAt: new Date(),
-			_idOwner: "123",
-			color: "#ff5733",
+			createdBy: "123",
+			color: "#563d7c",
 			tasks: [
 				{
 					_id: "1",
-					name: "Task 3",
-					description: "Task 3 for Back-end",
+					name: "Task 1",
+					description: "Task 1 for Back-end",
 					status: "Pending",
 					createdAt: new Date(),
 					updatedAt: new Date(),
 					createBy: "123",
-					assignBy: "123",
-					_idBoard: "1",
-					Attachments: [],
-				},
-				{
-					_id: "2",
-					name: "Task 4",
-					description: "Task 4 for Front-end",
-					status: "Proccess",
-					createdAt: new Date(),
-					updatedAt: new Date(),
-					createBy: "123",
-					assignBy: "123",
-					_idBoard: "1",
-					Attachments: [],
+					permitted: [
+						{
+							email: "abc",
+							_id: "123",
+						},
+					],
+					listId: "1",
+					attachments: [],
 				},
 			],
 		},
 	];
+
+	owner!: User;
+	isOwner: boolean = false;
 
 	typeColor: any[] = [
 		{
@@ -253,17 +251,63 @@ export class BoardDetailComponent implements OnInit {
 		(_, index) => `cdk-drop-list-${index}`
 	);
 
-	constructor(private activedRoute: ActivatedRoute) {}
+	constructor(
+		private activedRoute: ActivatedRoute,
+		private boardService: BoardService,
+		private listService: ListService,
+		private taskService: TaskService,
+		private authService: AuthService,
+		private userService: UserService
+	) {}
 	ngOnInit(): void {
 		this.activedRoute.params.subscribe((value) => {
 			console.log(value["id"]);
+			this.idBoard = value["id"];
+
+			// get Id from Token
+			const idUser = this.authService.getIdFromToken();
+
+			this.boardService.getById(this.idBoard).subscribe({
+				next: (res) => {
+					console.log(res);
+					this.board = res.data.board;
+
+					this.userService.getById(this.board.owner).subscribe({
+						next: (res) => {
+							console.log("User info");
+							this.owner = res.data.user;
+							console.log(this.owner);
+						},
+					});
+					// Check isOwner
+					if (this.board.owner == idUser) {
+						this.isOwner = true;
+					}
+
+					this.loadList();
+				},
+			});
 		});
 		this.loadListNotes();
 	}
 
 	drop(event: CdkDragDrop<any[]>) {
 		console.log(event);
+		const indexListPrev = Number.parseInt(
+			event.previousContainer.id.slice(14)
+		);
+		console.log(indexListPrev);
+		const indexListCurrent = Number.parseInt(event.container.id.slice(14));
+		console.log(indexListCurrent);
 
+		const idListPrev = this.lists[indexListPrev]._id;
+		const idListNext = this.lists[indexListCurrent]._id;
+
+		console.log(idListPrev);
+		console.log(idListNext);
+
+		// Gọi services update task
+		// Params truyền vào gồm: (idTask, idListPrev, idListNext)
 		console.log(
 			event.previousContainer.data,
 			event.container.data,
@@ -286,6 +330,24 @@ export class BoardDetailComponent implements OnInit {
 				event.currentIndex
 			);
 		}
+
+		forkJoin({
+			res1: this.listService.updateById(
+				this.lists[indexListPrev]._id,
+				this.lists[indexListPrev]
+			),
+			res2: this.listService.updateById(
+				this.lists[indexListCurrent]._id,
+				this.lists[indexListCurrent]
+			),
+		}).subscribe({
+			next: ({ res1, res2 }) => {
+				console.log({ res1, res2 });
+			},
+			error: (err) => {
+				console.log(err);
+			},
+		});
 	}
 
 	//! BOARD FUNCTION
@@ -311,13 +373,30 @@ export class BoardDetailComponent implements OnInit {
 		console.log(_id);
 	}
 
-	addTask(): void {
-		const dialogRef = this.dialog.open(FormAddComponent);
+	loadList(): void {
+		this.listService.getAllByIdBoard(this.board._id).subscribe({
+			next: (res) => {
+				console.log(res);
+				this.lists = res.data.list;
+			},
+		});
+	}
+
+	loadTask(): void {}
+
+	addTask(list: List): void {
+		const dialogRef = this.dialog.open(FormAddComponent, {
+			data: {
+				list,
+				memberlist: this.board.members,
+			},
+		});
 
 		dialogRef.afterClosed().subscribe((result) => {
 			console.log("The dialog was closed");
 			if (result) {
 				console.log("added");
+				this.loadList();
 			}
 		});
 	}
@@ -333,6 +412,7 @@ export class BoardDetailComponent implements OnInit {
 			console.log("The dialog was closed");
 			if (result) {
 				console.log("added");
+				this.loadTask();
 			}
 		});
 	}

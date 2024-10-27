@@ -1,7 +1,6 @@
 .form-add-task {
-	width: 500px;
 	padding: 36px 24px;
-
+	min-width: 500px;
 	h4 {
 		font-size: 20px;
 		font-weight: 450;
@@ -17,7 +16,68 @@
 			outline: none;
 			padding: 4px 8px;
 			border-radius: 8px;
-			margin-left: 24px;
+		}
+
+		.list--attachment {
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+			gap: 8px;
+			li {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 8px;
+				padding: 4px 8px;
+				border-radius: 4px;
+				border: 1px solid #cecece;
+				transition: 0.1s ease-in;
+				&:hover {
+					box-shadow: rgba(80, 80, 89, 0.2) 0px 7px 29px 0px;
+				}
+			}
+		}
+
+		.custom-file-upload {
+			position: relative;
+			width: 100%;
+			max-width: 150px;
+		}
+
+		// input[type="file"] {
+		// 	display: none; /* Ẩn input mặc định */
+		// }
+
+		.custom-upload-label {
+			display: inline-block;
+			background-color: #007bff;
+			color: white;
+			padding: 4px 8px;
+			font-size: 13px;
+			border-radius: 4px;
+			cursor: pointer;
+			text-align: center;
+			transition: background-color 0.2s ease;
+			width: 100%;
+		}
+
+		.custom-upload-label:hover {
+			background-color: #0056b3;
+		}
+
+		.custom-upload-label:active {
+			background-color: #003d7a;
 		}
 	}
+}
+.task--actions {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+ul {
+	margin: 0;
+	padding: 0;
 }

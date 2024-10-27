@@ -1,9 +1,9 @@
-import taskRepository from "../repositories/taskRepository.js";
+import taskServices from "../services/taskServices.js";
 import Result from "../common/Result.js";
 
 const getAll = async function (req, res) {
 	try {
-		const tasks = await taskRepository.getAll();
+		const tasks = await taskServices.getAll();
 		res.status(200).json(
 			new Result(
 				{
@@ -20,9 +20,7 @@ const getAll = async function (req, res) {
 
 const getAllByIdList = async function (req, res) {
 	try {
-		const tasks = await taskRepository.getAllByIdList(
-			req.params?.idList
-		);
+		const tasks = await taskServices.getAllByIdList(req.params?.idList);
 		res.status(200).json({
 			message: "GET by ID List",
 			data: {
@@ -39,7 +37,7 @@ const getAllByIdList = async function (req, res) {
 
 const getById = async function (req, res) {
 	try {
-		const existsTask = await taskRepository.getById(req.params?.id);
+		const existsTask = await taskServices.getById(req.params?.id);
 		if (existsTask != null) {
 			res.status(200).json({
 				message: "success",
@@ -61,9 +59,10 @@ const getById = async function (req, res) {
 	}
 };
 
-
 const create = async function (req, res) {
-	const newTask = await taskRepository.create(req.body);
+	console.log(req.body);
+
+	const newTask = await taskServices.create(req.body);
 
 	if (newTask != null) {
 		res.status(200).json({
@@ -78,11 +77,10 @@ const create = async function (req, res) {
 			data: {},
 		});
 	}
-
 };
 
 const updateById = async function (req, res) {
-	const update = await taskRepository.updateById(
+	const update = await taskServices.updateById(
 		req.params.id.trim(),
 		req.body
 	);
@@ -103,7 +101,7 @@ const updateById = async function (req, res) {
 };
 
 const deleteById = async function (req, res) {
-	const deleteSuccess = await taskRepository.deleteById(req.params?.id);
+	const deleteSuccess = await taskServices.deleteById(req.params?.id);
 	if (deleteSuccess.deletedCount > 0) {
 		res.status(200).json({
 			message: "Delete successful",
@@ -116,32 +114,32 @@ const deleteById = async function (req, res) {
 	}
 };
 
-const registerEmail = async function (req, res){
+const registerEmail = async function (req, res) {
 	const taskId = req.params.id;
-    const { permited } = req.body;
+	const { permited } = req.body;
 
-    if (!permited || !Array.isArray(permited)) {
-        return res.status(400).json({
-            status: "error",
-            message: "Invalid request. 'permited' must be an array of emails."
-        });
-    }
+	if (!permited || !Array.isArray(permited)) {
+		return res.status(400).json({
+			status: "error",
+			message: "Invalid request. 'permited' must be an array of emails.",
+		});
+	}
 
-    try {
-        const result = await taskRepository.registerEmail(taskId, permited);
-        return res.status(200).json({
-            status: "success",
-            message: "Emails processed.",
-            data: result,
-        });
-    } catch (error) {
-        return res.status(500).json({
-            status: "error",
-            message: "Error processing emails.",
-            error: error.message,
-        });
-    }
-}
+	try {
+		const result = await taskServices.registerEmail(taskId, permited);
+		return res.status(200).json({
+			status: "success",
+			message: "Emails processed.",
+			data: result,
+		});
+	} catch (error) {
+		return res.status(500).json({
+			status: "error",
+			message: "Error processing emails.",
+			error: error.message,
+		});
+	}
+};
 export default {
 	getAll,
 	getAllByIdList,
@@ -149,5 +147,5 @@ export default {
 	create,
 	updateById,
 	deleteById,
-	registerEmail
+	registerEmail,
 };

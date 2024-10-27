@@ -1,9 +1,9 @@
-import listRepository from "../repositories/listRepository.js";
+import listServices from "../services/listServices.js";
 import Result from "../common/Result.js";
 
 const getAll = async function (req, res) {
 	try {
-		const lists = await listRepository.getAll();
+		const lists = await listServices.getAll();
 		res.status(200).json(
 			new Result(
 				{
@@ -20,9 +20,7 @@ const getAll = async function (req, res) {
 
 const getAllByIdBoard = async function (req, res) {
 	try {
-		const lists = await listRepository.getAllByIdBoard(
-			req.params?.idBoard
-		);
+		const lists = await listServices.getAllByIdBoard(req.params?.idBoard);
 		res.status(200).json({
 			message: "GET by ID Board",
 			data: {
@@ -39,7 +37,7 @@ const getAllByIdBoard = async function (req, res) {
 
 const getById = async function (req, res) {
 	try {
-		const existsList = await listRepository.getById(req.params?.id);
+		const existsList = await listServices.getById(req.params?.id);
 		if (existsList != null) {
 			res.status(200).json({
 				message: "success",
@@ -61,12 +59,10 @@ const getById = async function (req, res) {
 	}
 };
 
-
-
 const create = function (req, res) {
 	console.log(req.body);
 
-	const newlist = listRepository.create(req.body);
+	const newlist = listServices.create(req.body);
 
 	if (newlist != null) {
 		res.status(200).json({
@@ -83,9 +79,8 @@ const create = function (req, res) {
 	}
 };
 
-
 const updateById = async function (req, res) {
-	const update = await listRepository.updateById(
+	const update = await listServices.updateById(
 		req.params.id.trim(),
 		req.body
 	);
@@ -106,7 +101,7 @@ const updateById = async function (req, res) {
 };
 
 const deleteById = async function (req, res) {
-	const deleteSuccess = await listRepository.deleteById(req.params?.id);
+	const deleteSuccess = await listServices.deleteById(req.params?.id);
 	if (deleteSuccess.deletedCount > 0) {
 		res.status(200).json({
 			message: "Delete successful",

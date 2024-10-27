@@ -19,6 +19,10 @@ export class LoginComponent {
 	formLogin!: FormGroup;
 
 	constructor(private service: AuthService, private router: Router) {
+		if (localStorage.getItem("token")) {
+			this.router.navigateByUrl("/board");
+		}
+
 		this.formLogin = new FormGroup({
 			email: new FormControl(""),
 			password: new FormControl(""),
@@ -31,8 +35,8 @@ export class LoginComponent {
 			.subscribe({
 				next: (res) => {
 					if (res.isSuccess) {
-						sessionStorage.setItem("token", res.data.user.token);
-						this.router.navigateByUrl("/");
+						localStorage.setItem("token", res.data.user.token);
+						this.router.navigateByUrl("/board");
 					}
 				},
 			});

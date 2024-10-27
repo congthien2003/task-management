@@ -1,1 +1,41 @@
-<p>form-board works!</p>
+<div class="form-add-task">
+	<h4>Add new board</h4>
+	<form [formGroup]="form">
+		<div class="mb-3">
+			<label for="name">Name</label>
+			<input
+				class="form-control"
+				type="text"
+				id="name"
+				formControlName="name" />
+		</div>
+		<div class="mb-3">
+			<label for="description">Description</label>
+			<textarea
+				class="form-control"
+				type="text"
+				id="description"
+				formControlName="description"></textarea>
+		</div>
+		<div class="mb-3">
+			<label
+				>Members: @for (item of ListEmailInput; track $index) {
+				<span class="badge fw-400 bg-secondary mx-2">{{ item }}</span>
+				}
+			</label>
+			<div class="d-flex align-items-center gap-2">
+				<input
+					class="form-control"
+					type="email"
+					[(value)]="emailInput"
+					(change)="changeEmailInput($event)" />
+				<button mat-stroked-button (click)="addEmail()">Invite</button>
+			</div>
+		</div>
+		<div class="task--actions">
+			<button mat-flat-button class="w-100" (click)="submit()">
+				Create
+			</button>
+		</div>
+	</form>
+</div>

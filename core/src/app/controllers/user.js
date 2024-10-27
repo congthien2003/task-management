@@ -1,4 +1,4 @@
-import userRepository from "../repositories/userRepository.js";
+import userServices from "../services/userServices.js";
 import Result from "../common/Result.js";
 
 import fs from "fs";
@@ -7,7 +7,7 @@ import path from "path";
 const getById = async function (req, res) {
 	const id = req?.params?.id ?? "";
 	if (id != "") {
-		const userExists = await userRepository.getById(id);
+		const userExists = await userServices.getById(id);
 
 		if (userExists) {
 			res.status(200).json(
@@ -30,7 +30,7 @@ const getByEmail = async function (req, res) {
 			data: {},
 		});
 	} else {
-		const userExists = await userRepository.getByEmail(email);
+		const userExists = await userServices.getByEmail(email);
 		if (userExists) {
 			res.status(200).json(new Result(userExists, "success", true));
 		} else {
@@ -40,7 +40,7 @@ const getByEmail = async function (req, res) {
 };
 
 const getAll = async function (req, res) {
-	const userExists = await userRepository.getAll();
+	const userExists = await userServices.getAll();
 	res.status(200).json({
 		message: `Get all success !`,
 		data: {

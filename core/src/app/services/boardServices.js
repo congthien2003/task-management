@@ -1,4 +1,5 @@
-import Board from "../models/Board.js";
+import Board from "../entity/Board.js";
+import User from "../entity/User.js";
 
 const getById = async function (id) {
 	try {
@@ -27,8 +28,10 @@ const getAllByIdUser = async function (idUser) {
 const getCoopBoardByIdUser = async function (idUser) {
 	try {
 		// const ownerId = mongoose.Types.ObjectId(idUser);
+		const user = await User.findById({ _id: idUser });
+
 		const listBoard = await Board.find({
-			members: { $in: [idUser] },
+			members: { $in: [user.email] },
 		});
 		return listBoard;
 	} catch (exception) {

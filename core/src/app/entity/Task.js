@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import mongooseDelete from "mongoose-delete";
+import Attachment from "./Attachment.js";
 const Schema = mongoose.Schema;
 
 const Task = new Schema({
@@ -15,32 +16,11 @@ const Task = new Schema({
 		ref: "Users",
 		required: true,
 	},
-<<<<<<< .mine
 	createAt: { type: Date, default: Date.now },
 	updateAt: { type: Date, default: Date.now },
-	createdBy: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Users",
-
-
-
-
-=======
-	assignBy: [
+	permitted: [
 		{
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Users",
-		},
-	],
-	boardId: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Boards",
->>>>>>> .theirs
-		required: true,
-	},
-	permited: [
-		{
-			email: { type: String}
+			email: { type: String },
 		},
 	],
 	listId: {
@@ -48,7 +28,12 @@ const Task = new Schema({
 		ref: "Lists",
 		required: true,
 	},
-	
+	attachments: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Attachments",
+		},
+	],
 });
 
 Task.plugin(mongooseDelete);

@@ -1,5 +1,9 @@
 export interface Attachment {
-	fileName: { type: String; required: true };
-	fileUrl: { type: String; required: true };
-	fileType: { type: String };
+	_id: string;
+	fileName: string;
+	filePath: string;
+	fileType: string;
+	createAt: Date;
+	updateAt: Date;
+	taskId: string;
 }

@@ -4,7 +4,7 @@ import BoardController from "../app/controllers/board.js";
 const router = express.Router();
 
 router.get("/c/:idUser", BoardController.getCoopboardByIdUser);
-router.get("/u/:idUser", BoardController.getAllByIdUser);
+router.get("/getAll/:idUser", BoardController.getAllByIdUser);
 router.get("/:id", BoardController.getById);
 router.post("/:id/add-members", BoardController.addMembers);
 router.post("/:id/remove-members", BoardController.removeMembers);
