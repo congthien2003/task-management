@@ -1,6 +1,6 @@
 import { Component, inject } from "@angular/core";
 import { Board } from "../../core/models/Board";
-import { RouterLink, RouterOutlet } from "@angular/router";
+import { Router, RouterLink, RouterOutlet } from "@angular/router";
 import { AuthService } from "../../core/services/auth.service";
 import { BoardService } from "../../core/services/board.service";
 import { SocketIoService } from "../../core/services/socket.io.service";
@@ -35,7 +35,7 @@ export class BoardComponent {
 
 	messages: string[] = [];
 	newMessage: string = "";
-	constructor(private auth: AuthService, private boardService: BoardService) {
+	constructor(private auth: AuthService, private boardService: BoardService, private router: Router) {
 		this.idUser = this.auth.getIdFromToken();
 
 		this.boardService.getAllByIdUser(this.idUser).subscribe({
@@ -70,5 +70,10 @@ export class BoardComponent {
 				console.log("added");
 			}
 		});
+	}
+
+	logOut() {
+		this.router.navigateByUrl('/auth/login');
+		localStorage.clear();
 	}
 }
