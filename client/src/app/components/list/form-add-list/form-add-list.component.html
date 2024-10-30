@@ -1,0 +1,23 @@
+<div class="form-add-list">
+	<h4>Add new member</h4>
+	<form [formGroup]="form">
+		<div class="mb-3">
+			<label for="name">List name</label>
+			<input class="form-control" type="text" formControlName="name" />
+		</div>
+		<div class="mb-3">
+			<label for="listName">Description</label>
+			<input class="form-control" formControlName="description" />
+		</div>
+		<div class="mb-3">
+			<label for="listName">Choose color: </label>
+			<input
+				#colorPicker
+				class="color-picker mx-2"
+				type="color"
+				title="Choose your color"
+				(change)="this.color = colorPicker.value" />
+		</div>
+		<button class="btn btn-primary w-100" (click)="submit()">Invite</button>
+	</form>
+</div>

@@ -7,11 +7,13 @@ import { SocketIoService } from "../../core/services/socket.io.service";
 import { MatDialog } from "@angular/material/dialog";
 import { AddMemberComponent } from "../add-member/add-member.component";
 import { FormBoardComponent } from "./form-board/form-board.component";
+import { ToastrService } from "ngx-toastr";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
 	selector: "app-board",
 	standalone: true,
-	imports: [RouterLink, RouterOutlet],
+	imports: [RouterLink, RouterOutlet, MatButtonModule],
 	templateUrl: "./board.component.html",
 	styleUrl: "./board.component.scss",
 })
@@ -35,7 +37,12 @@ export class BoardComponent {
 
 	messages: string[] = [];
 	newMessage: string = "";
-	constructor(private auth: AuthService, private boardService: BoardService, private router: Router) {
+	constructor(
+		private auth: AuthService,
+		private toastr: ToastrService,
+		private boardService: BoardService,
+		private router: Router
+	) {
 		this.idUser = this.auth.getIdFromToken();
 
 		this.boardService.getAllByIdUser(this.idUser).subscribe({
@@ -65,15 +72,20 @@ export class BoardComponent {
 		const dialogRef = this.dialog.open(FormBoardComponent);
 
 		dialogRef.afterClosed().subscribe((result) => {
-			console.log("The dialog was closed");
 			if (result) {
-				console.log("added");
+				this.toastr.success("Add new board", "Success", {
+					timeOut: 3000,
+				});
 			}
 		});
 	}
 
+	infoUser() {
+		this.router.navigateByUrl("/user");
+	}
+
 	logOut() {
-		this.router.navigateByUrl('/auth/login');
+		this.router.navigateByUrl("/auth/login");
 		localStorage.clear();
 	}
 }

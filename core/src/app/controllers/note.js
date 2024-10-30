@@ -18,6 +18,8 @@ const getAll = async function (req, res) {
 };
 const getAllByIdBoard = async function (req, res) {
 	try {
+		console.log(req.params?.idBoard);
+
 		const notes = await noteServices.getAllByIdBoard(req.params?.idBoard);
 		res.status(200).json({
 			message: "GET by ID Board",
@@ -96,15 +98,8 @@ const create = function (req, res) {
 const updateStatus = async function (req, res) {
 	try {
 		const { id } = req.params; // Lấy id của ghi chú từ URL
-		const { isPinned } = req.body; // Lấy giá trị isPinned từ body của yêu cầu
 
-		if (typeof isPinned !== "boolean") {
-			return res
-				.status(400)
-				.json(new Result(null, "Invalid isPinned value", false));
-		}
-
-		const updatedNote = await noteServices.updateStatus(id, isPinned); // Gọi hàm updateStatus từ repository
+		const updatedNote = await noteServices.updateStatus(id); // Gọi hàm updateStatus từ repository
 
 		if (updatedNote) {
 			return res
@@ -112,9 +107,7 @@ const updateStatus = async function (req, res) {
 				.json(
 					new Result(
 						{ note: updatedNote },
-						`Note status updated to ${
-							isPinned ? "pinned" : "unpinned"
-						}`,
+						`Note status updated to `,
 						true
 					)
 				);

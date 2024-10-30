@@ -1,0 +1,18 @@
+.detail--user {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	form {
+		width: 500px;
+		border: 1px solid #cecece;
+		border-radius: 16px;
+		padding: 48px 16px;
+		h4 {
+			text-align: center;
+		}
+		input {
+			width: 100%;
+		}
+	}
+}

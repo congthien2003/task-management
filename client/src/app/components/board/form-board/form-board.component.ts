@@ -9,6 +9,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MatSelectModule } from "@angular/material/select";
 import { BoardService } from "../../../core/services/board.service";
+import { AuthService } from "../../../core/services/auth.service";
+import { Board } from "../../../core/models/Board";
 
 @Component({
 	selector: "app-form-board",
@@ -29,13 +31,17 @@ export class FormBoardComponent implements OnInit {
 
 	ListEmailInput: string[] = [];
 	emailInput: string = "";
-
-	constructor(private boardService: BoardService) {}
+	idOwner: string = "";
+	constructor(
+		private boardService: BoardService,
+		private authService: AuthService
+	) {}
 	ngOnInit(): void {
+		this.idOwner = this.authService.getIdFromToken();
 		this.form = new FormGroup({
 			name: new FormControl(""),
 			description: new FormControl(""),
-			owner: new FormControl(""),
+			owner: new FormControl(this.idOwner),
 			members: new FormControl([]),
 			lists: new FormControl([]),
 		});
@@ -55,5 +61,11 @@ export class FormBoardComponent implements OnInit {
 	submit(): void {
 		this.form.get("members")?.setValue(this.ListEmailInput);
 		console.log(this.form.value);
+		this.boardService.create(this.form.value as Board).subscribe({
+			next: (res) => {
+				console.log(res);
+				this.dialogRef.close(true);
+			},
+		});
 	}
 }

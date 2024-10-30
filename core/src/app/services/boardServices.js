@@ -49,13 +49,14 @@ const getAll = async function () {
 	}
 };
 
-const create = function ({ name, description, quantity, ownerId }) {
+const create = function ({ name, description, members, quantity, owner }) {
 	try {
 		const newBoard = new Board({
 			name,
 			description,
 			quantity,
-			owner: ownerId,
+			owner,
+			members,
 		});
 		newBoard.save();
 		return newBoard;

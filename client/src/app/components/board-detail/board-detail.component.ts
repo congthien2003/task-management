@@ -30,6 +30,9 @@ import { AuthService } from "../../core/services/auth.service";
 import { User } from "../../core/models/User";
 import { UserService } from "../../core/services/user.service";
 import { forkJoin } from "rxjs";
+import { FormAddListComponent } from "../list/form-add-list/form-add-list.component";
+import { ToastrService } from "ngx-toastr";
+import { NoteService } from "../../core/services/note.service";
 const MatImport = [
 	MatButtonModule,
 	MatTabsModule,
@@ -134,7 +137,7 @@ export class BoardDetailComponent implements OnInit {
 			name: "Note 1",
 			description: "Note 1 for Back-end",
 			type: "Pending",
-			pinned: true,
+			isPinned: true,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			createdBy: "123",
@@ -145,7 +148,7 @@ export class BoardDetailComponent implements OnInit {
 			name: "Note 1",
 			description: "Note 1 for Back-end",
 			type: "Pending",
-			pinned: false,
+			isPinned: false,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			createdBy: "123",
@@ -156,7 +159,7 @@ export class BoardDetailComponent implements OnInit {
 			name: "Note 1",
 			description: "Note 1 for Back-end",
 			type: "Pending",
-			pinned: true,
+			isPinned: true,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			createdBy: "123",
@@ -167,7 +170,7 @@ export class BoardDetailComponent implements OnInit {
 			name: "Note 1",
 			description: "Note 1 for Back-end",
 			type: "Pending",
-			pinned: false,
+			isPinned: false,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			createdBy: "123",
@@ -178,7 +181,7 @@ export class BoardDetailComponent implements OnInit {
 			name: "Note 1",
 			description: "Note 1 for Back-end",
 			type: "Pending",
-			pinned: true,
+			isPinned: true,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			createdBy: "123",
@@ -189,7 +192,7 @@ export class BoardDetailComponent implements OnInit {
 			name: "Note 1",
 			description: "Note 1 for Back-end",
 			type: "Pending",
-			pinned: false,
+			isPinned: false,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			createdBy: "123",
@@ -200,7 +203,7 @@ export class BoardDetailComponent implements OnInit {
 			name: "Note 1",
 			description: "Note 1 for Back-end",
 			type: "Pending",
-			pinned: true,
+			isPinned: true,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			createdBy: "123",
@@ -211,7 +214,7 @@ export class BoardDetailComponent implements OnInit {
 			name: "Note 1",
 			description: "Note 1 for Back-end",
 			type: "Pending",
-			pinned: true,
+			isPinned: true,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			createdBy: "123",
@@ -222,7 +225,7 @@ export class BoardDetailComponent implements OnInit {
 			name: "Note 1",
 			description: "Note 1 for Back-end",
 			type: "Pending",
-			pinned: true,
+			isPinned: true,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			createdBy: "123",
@@ -233,7 +236,7 @@ export class BoardDetailComponent implements OnInit {
 			name: "Note 1",
 			description: "Note 1 for Back-end",
 			type: "Pending",
-			pinned: true,
+			isPinned: true,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			createdBy: "123",
@@ -257,7 +260,9 @@ export class BoardDetailComponent implements OnInit {
 		private listService: ListService,
 		private taskService: TaskService,
 		private authService: AuthService,
-		private userService: UserService
+		private userService: UserService,
+		private toastr: ToastrService,
+		private noteSerivce: NoteService
 	) {}
 	ngOnInit(): void {
 		this.activedRoute.params.subscribe((value) => {
@@ -292,28 +297,18 @@ export class BoardDetailComponent implements OnInit {
 	}
 
 	drop(event: CdkDragDrop<any[]>) {
-		console.log(event);
 		const indexListPrev = Number.parseInt(
 			event.previousContainer.id.slice(14)
 		);
-		console.log(indexListPrev);
+
 		const indexListCurrent = Number.parseInt(event.container.id.slice(14));
-		console.log(indexListCurrent);
 
 		const idListPrev = this.lists[indexListPrev]._id;
 		const idListNext = this.lists[indexListCurrent]._id;
 
-		console.log(idListPrev);
-		console.log(idListNext);
-
 		// Gọi services update task
 		// Params truyền vào gồm: (idTask, idListPrev, idListNext)
-		console.log(
-			event.previousContainer.data,
-			event.container.data,
-			event.previousIndex,
-			event.currentIndex
-		);
+
 		if (event.previousContainer === event.container) {
 			// Task được di chuyển trong cùng một danh sách
 			moveItemInArray(
@@ -367,6 +362,26 @@ export class BoardDetailComponent implements OnInit {
 
 	EditingNameList: boolean = false;
 	nameList: string = "";
+
+	//! BOARD FUNCTION
+	readonly dialogList = inject(MatDialog);
+	openDialogAddList() {
+		const dialogRef = this.dialogList.open(FormAddListComponent, {
+			data: {
+				board: this.board,
+			},
+		});
+
+		dialogRef.afterClosed().subscribe((result) => {
+			console.log("The dialog was closed");
+			if (result) {
+				this.toastr.success("Add new list", "Success", {
+					timeOut: 3000,
+				});
+				this.loadList();
+			}
+		});
+	}
 	editList(list: List): void {}
 
 	deleteList(_id: string): void {
@@ -377,7 +392,11 @@ export class BoardDetailComponent implements OnInit {
 		this.listService.getAllByIdBoard(this.board._id).subscribe({
 			next: (res) => {
 				console.log(res);
+
 				this.lists = res.data.list;
+				this.connectedLists = this.lists.map(
+					(_, index) => `cdk-drop-list-${index}`
+				);
 			},
 		});
 	}
@@ -420,17 +439,29 @@ export class BoardDetailComponent implements OnInit {
 	//! NOTE FUNCTION
 
 	loadListNotes(): void {
-		this.pinnedNotes = this.notes.filter((e) => e.pinned === true);
-		this.defaultNotes = this.notes.filter((e) => e.pinned === false);
+		this.noteSerivce.getAllByIdBoard(this.idBoard).subscribe({
+			next: (res) => {
+				console.log(res);
+				this.notes = res.data.list;
+				this.pinnedNotes = this.notes.filter(
+					(e) => e.isPinned === true
+				);
+				this.defaultNotes = this.notes.filter(
+					(e) => e.isPinned === false
+				);
+			},
+		});
 	}
 
 	addNote(): void {
-		const dialogRef = this.dialog.open(AddNoteComponent);
+		const dialogRef = this.dialog.open(AddNoteComponent, {
+			data: { board: this.board },
+		});
 
 		dialogRef.afterClosed().subscribe((result) => {
 			console.log("The dialog was closed");
 			if (result) {
-				console.log("added");
+				this.loadListNotes();
 			}
 		});
 	}
@@ -451,6 +482,10 @@ export class BoardDetailComponent implements OnInit {
 	}
 
 	pinHandle(id: string): void {
-		console.log("pin note");
+		this.noteSerivce.updateStatus(id).subscribe({
+			next: (res) => {
+				this.loadListNotes();
+			},
+		});
 	}
 }

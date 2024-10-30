@@ -68,6 +68,10 @@
 					display: flex;
 					gap: 8px;
 
+					.btn-add-list {
+						margin-top: 12px;
+						height: 50px;
+					}
 					@import "../../shared/variable.scss";
 
 					.list {

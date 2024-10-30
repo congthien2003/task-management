@@ -3,7 +3,7 @@ export interface Note {
 	name: string;
 	description: string;
 	type: string;
-	pinned: boolean;
+	isPinned: boolean;
 	createdAt: Date;
 	updatedAt: Date;
 	createdBy: string;

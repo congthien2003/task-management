@@ -45,7 +45,7 @@
 							<p>
 								Total member:
 								<span class="badge bg-success">{{
-									board.quantity
+									board.members.length + 1
 								}}</span>
 							</p>
 						</div>
@@ -57,7 +57,7 @@
 							<span class="badge bg-warning">Đã hoàn thành</span>
 							}
 						</p>
-						<p>Owner: {{ owner.username }}</p>
+						<p>Owner: {{ owner!.username }}</p>
 					</div>
 				</div>
 			</mat-tab>
@@ -177,6 +177,13 @@
 						</div>
 
 						}
+						<button
+							(click)="openDialogAddList()"
+							mat-stroked-button
+							color="accent"
+							class="btn-add-list">
+							Add new list
+						</button>
 					</div>
 				</div>
 			</mat-tab>
@@ -217,7 +224,7 @@
 								<div class="note">
 									<h5 class="name">
 										{{ note.name }}
-										@if (!note.pinned) {
+										@if (!note.isPinned) {
 										<span (click)="pinHandle(note._id)"
 											><i
 												class="fa-solid fa-thumbtack"></i
@@ -244,7 +251,7 @@
 								<div class="note">
 									<h5 class="name">
 										{{ note.name }}
-										@if (!note.pinned) {
+										@if (!note.isPinned) {
 										<span (click)="pinHandle(note._id)"
 											><i
 												class="fa-solid fa-thumbtack"></i
