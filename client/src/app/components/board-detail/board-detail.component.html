@@ -4,7 +4,7 @@
 		<div class="member">
 			<div class="quantity">
 				<i class="fa fa-user-circle" aria-hidden="true"></i>
-				{{ board.members.length }}
+				{{ board.members.length + 1 }}
 			</div>
 			<button
 				[disabled]="!isOwner"
@@ -36,11 +36,13 @@
 						<div class="counting">
 							<p>
 								Total task:
-								<span class="badge bg-warning">3</span>
+								<span class="badge bg-warning">30</span>
 							</p>
 							<p>
 								Total note:
-								<span class="badge bg-info">24</span>
+								<span class="badge bg-info">{{
+									this.notes.length
+								}}</span>
 							</p>
 							<p>
 								Total member:
@@ -57,7 +59,14 @@
 							<span class="badge bg-warning">Đã hoàn thành</span>
 							}
 						</p>
-						<p>Owner: {{ owner!.username }}</p>
+						<p>Owner: {{ owner!.email }}</p>
+						<div>
+							@for (item of board.members; track $index) {
+							<span class="badge bg-primary mx-1 my-1">{{
+								item
+							}}</span>
+							}
+						</div>
 					</div>
 				</div>
 			</mat-tab>

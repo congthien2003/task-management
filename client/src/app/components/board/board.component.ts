@@ -45,6 +45,10 @@ export class BoardComponent {
 	) {
 		this.idUser = this.auth.getIdFromToken();
 
+		this.loadBoard();
+	}
+
+	loadBoard() {
 		this.boardService.getAllByIdUser(this.idUser).subscribe({
 			next: (res) => {
 				console.log(res);
@@ -64,7 +68,6 @@ export class BoardComponent {
 				});
 			},
 		});
-		console.log(this.idUser);
 	}
 
 	readonly dialog = inject(MatDialog);
@@ -76,6 +79,7 @@ export class BoardComponent {
 				this.toastr.success("Add new board", "Success", {
 					timeOut: 3000,
 				});
+				this.loadBoard();
 			}
 		});
 	}

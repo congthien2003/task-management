@@ -10,7 +10,7 @@ export class SocketIoService {
 
 	constructor() {
 		// Khởi tạo socket với URL server
-		this.socket = io("http://localhost:3000/api"); // Thay bằng URL của server nếu cần
+		this.socket = io("http://localhost:3000/api");
 	}
 
 	// Phương thức để lắng nghe sự kiện từ server

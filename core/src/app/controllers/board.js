@@ -101,8 +101,9 @@ const create = function (req, res) {
 };
 
 const addMembers = async function (req, res) {
-	const members = req.body?.members;
+	const members = req.body?.email;
 	const id = req.params?.id;
+	console.log(req.body);
 
 	if (members == undefined) {
 		return res.status(400).json({

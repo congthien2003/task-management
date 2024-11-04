@@ -290,10 +290,10 @@ export class BoardDetailComponent implements OnInit {
 					}
 
 					this.loadList();
+					this.loadListNotes();
 				},
 			});
 		});
-		this.loadListNotes();
 	}
 
 	drop(event: CdkDragDrop<any[]>) {
@@ -348,13 +348,29 @@ export class BoardDetailComponent implements OnInit {
 	//! BOARD FUNCTION
 	readonly dialog = inject(MatDialog);
 	openDialogAddMember() {
-		const dialogRef = this.dialog.open(AddMemberComponent);
+		const dialogRef = this.dialog.open(AddMemberComponent, {
+			data: {
+				board: this.board,
+			},
+		});
 
 		dialogRef.afterClosed().subscribe((result) => {
 			console.log("The dialog was closed");
 			if (result) {
 				console.log("added");
+				this.loadBoard();
 			}
+		});
+	}
+	loadBoard() {
+		this.boardService.getById(this.idBoard).subscribe({
+			next: (res) => {
+				console.log(res);
+				this.board = res.data.board;
+
+				this.loadList();
+				this.loadListNotes();
+			},
 		});
 	}
 
@@ -362,8 +378,6 @@ export class BoardDetailComponent implements OnInit {
 
 	EditingNameList: boolean = false;
 	nameList: string = "";
-
-	//! BOARD FUNCTION
 	readonly dialogList = inject(MatDialog);
 	openDialogAddList() {
 		const dialogRef = this.dialogList.open(FormAddListComponent, {

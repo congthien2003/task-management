@@ -74,11 +74,11 @@ const addMembers = async function (id, members) {
 				quantity: members.length + 1,
 			}
 		);
-		const Board = await Board.findById({
+		const board = await Board.findById({
 			_id: id,
 		});
 
-		return Board;
+		return board;
 	} catch (exception) {
 		console.log(exception.message);
 		return null;

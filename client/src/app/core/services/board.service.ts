@@ -39,8 +39,8 @@ export class BoardService {
 	// Thêm thành viên vào board
 	addMembers(boardId: string, memberEmail: any): Observable<ApiResponse> {
 		return this.master.post(
-			`${this.endpoint.addMembers}/${boardId}/add-member`,
-			memberEmail
+			`${this.endpoint.addMembers}/${boardId}/add-members`,
+			{ email: memberEmail }
 		);
 	}
 
