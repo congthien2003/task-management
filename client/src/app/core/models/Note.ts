@@ -1,16 +1,11 @@
 export interface Note {
-	name: { type: String; require: true };
-	description: { type: String };
-	type: {
-		type: String;
-		default: "Normal";
-	};
-	createdAt: { type: Date };
-	updatedAt: { type: Date };
-	createdBy: {
-		type: string;
-	};
-	_idProject: {
-		type: string;
-	};
+	_id: string;
+	name: string;
+	description: string;
+	type: string;
+	isPinned: boolean;
+	createdAt: Date;
+	updatedAt: Date;
+	createdBy: string;
+	_idProject: string;
 }

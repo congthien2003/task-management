@@ -1,0 +1,296 @@
+<div class="board--detail">
+	<div class="header">
+		<h4>{{ board.name }}</h4>
+		<div class="member">
+			<div class="quantity">
+				<i class="fa fa-user-circle" aria-hidden="true"></i>
+				{{ board.members.length + 1 }}
+			</div>
+			<button
+				[disabled]="!isOwner"
+				mat-flat-button
+				class="btn-sm"
+				(click)="openDialogAddMember()">
+				<i class="fa fa-plus" aria-hidden="true"></i>
+				Add member
+			</button>
+		</div>
+	</div>
+
+	<div class="content">
+		<mat-tab-group>
+			@if (board !== undefined) {
+			<mat-tab label="Overview">
+				<div class="content-tab">
+					<div class="overview">
+						<h4>{{ board.name }}</h4>
+						<div class="board-progress">
+							<mat-progress-bar
+								mode="determinate"
+								value="40"></mat-progress-bar>
+						</div>
+						<p class="description">
+							Description: {{ board.description }}
+						</p>
+
+						<div class="counting">
+							<p>
+								Total task:
+								<span class="badge bg-warning">30</span>
+							</p>
+							<p>
+								Total note:
+								<span class="badge bg-info">{{
+									this.notes.length
+								}}</span>
+							</p>
+							<p>
+								Total member:
+								<span class="badge bg-success">{{
+									board.members.length + 1
+								}}</span>
+							</p>
+						</div>
+
+						<p>
+							Status: @if(board.status == 0) {
+							<span class="badge bg-primary">Đang diễn ra</span>
+							} @else {
+							<span class="badge bg-warning">Đã hoàn thành</span>
+							}
+						</p>
+						<p>Owner: {{ owner!.email }}</p>
+						<div>
+							@for (item of board.members; track $index) {
+							<span class="badge bg-primary mx-1 my-1">{{
+								item
+							}}</span>
+							}
+						</div>
+					</div>
+				</div>
+			</mat-tab>
+			<mat-tab label="Task">
+				<div class="content-tab">
+					<div class="list">
+						@for (list of lists; track $index) {
+						<div class="list--wrapper" cdkDropListGroup>
+							<div
+								class="list--header"
+								[ngStyle]="{
+									'border-bottom': '5px solid' + list.color
+								}">
+								<h5>
+									{{ list.name }}
+								</h5>
+								<div class="list--actions">
+									<span
+										class="badge text-white mx-2"
+										[ngStyle]="{
+											'background-color': list.color
+										}"
+										>{{ list.tasks.length }}</span
+									>
+
+									<div class="dropdown">
+										<button
+											class="btn btn-sm btn-secondary dropdown-toggle"
+											type="button"
+											id="dropdownMenu{{ $index }}"
+											data-bs-toggle="dropdown"
+											aria-expanded="false"></button>
+										<ul class="dropdown-menu">
+											<li
+												class="dropdown-item d-flex align-items-center justify-content-between">
+												Choose color:
+												<input
+													class="color-picker mx-2"
+													type="color"
+													id="colorPicker{{ $index }}"
+													[(ngModel)]="list.color"
+													title="Choose your color" />
+											</li>
+											<li
+												class="dropdown-item"
+												(click)="editList(list)">
+												Edit this list
+											</li>
+											<li
+												class="dropdown-item"
+												(click)="deleteList(list._id)">
+												Delete this list
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+							<div
+								class="list--content"
+								cdkDropList
+								[cdkDropListData]="list.tasks"
+								(cdkDropListDropped)="drop($event)"
+								[cdkDropListConnectedTo]="connectedLists">
+								@for (item of list.tasks; track item) {
+								<div class="task" cdkDrag [cdkDragData]="item">
+									@if (item.status == "Pending") {
+									<span class="badge text-white bg-warning">{{
+										item.status
+									}}</span>
+									} @if (item.status == "In Progress") {
+									<span class="badge text-white bg-primary">{{
+										item.status
+									}}</span>
+									} @if (item.status == "Completed") {
+									<span class="badge text-white bg-success">{{
+										item.status
+									}}</span>
+									}
+
+									<div class="task--header">
+										<span>{{ item.name }}</span>
+										<span (click)="editTask(item)"
+											><i
+												class="fa fa-edit"
+												aria-hidden="true"></i
+										></span>
+									</div>
+									<div class="task--description">
+										<p>{{ item.description }}</p>
+									</div>
+									<div class="task--footer">
+										<span>
+											<i
+												class="fa fa-user"
+												aria-hidden="true"></i>
+											{{ item.permitted.length }}</span
+										>
+										<span>
+											<i
+												class="fa fa-file"
+												aria-hidden="true"></i>
+											{{ item.attachments.length }}</span
+										>
+									</div>
+								</div>
+								}
+								<div class="actions">
+									<button
+										mat-stroked-button
+										color="accent"
+										(click)="addTask(list)">
+										Add new task
+									</button>
+								</div>
+							</div>
+						</div>
+
+						}
+						<button
+							(click)="openDialogAddList()"
+							mat-stroked-button
+							color="accent"
+							class="btn-add-list">
+							Add new list
+						</button>
+					</div>
+				</div>
+			</mat-tab>
+			<mat-tab label="Note">
+				<div class="content-tab">
+					<div class="note--wrapper">
+						<div class="note--header">
+							<button
+								mat-stroked-button
+								class="btn btn-sm"
+								(click)="addNote()">
+								Add new note
+								<i class="fa fa-plus" aria-hidden="true"></i>
+							</button>
+							<!-- <div class="note-filter">
+								<div class="dropdown">
+									<button
+										mat-button
+										class="btn btn-sm dropdown-toggle"
+										type="button"
+										id="dropdownMenuFilter"
+										data-bs-toggle="dropdown"
+										aria-expanded="false">
+										Filter
+									</button>
+									<ul class="dropdown-menu">
+										<li class="dropdown-item">Pinned</li>
+										<li class="dropdown-item">Unpin</li>
+										<li class="dropdown-item">All</li>
+									</ul>
+								</div>
+							</div> -->
+						</div>
+						<div class="pin-note">
+							<h3>Pinned</h3>
+							<div class="list-note-pinned">
+								@for (note of pinnedNotes; track $index) {
+								<div class="note">
+									<h5 class="name">
+										{{ note.name }}
+										@if (!note.isPinned) {
+										<span (click)="pinHandle(note._id)"
+											><i
+												class="fa-solid fa-thumbtack"></i
+										></span>
+										} @else {
+										<span (click)="pinHandle(note._id)">
+											<i
+												class="fa-solid fa-thumbtack-slash"></i>
+										</span>
+										}
+									</h5>
+									<p class="description">
+										{{ note.description }}
+									</p>
+									<p class="type">{{ note.type }}</p>
+								</div>
+								}
+							</div>
+						</div>
+						<div class="default-note">
+							<h3>Notes</h3>
+							<div class="list-note-default">
+								@for (note of defaultNotes; track $index) {
+								<div class="note">
+									<h5 class="name">
+										{{ note.name }}
+										@if (!note.isPinned) {
+										<span (click)="pinHandle(note._id)"
+											><i
+												class="fa-solid fa-thumbtack"></i
+										></span>
+										} @else {
+										<span (click)="pinHandle(note._id)">
+											<i
+												class="fa-solid fa-thumbtack-slash"></i>
+										</span>
+										}
+									</h5>
+									<p class="description">
+										{{ note.description }}
+									</p>
+									<p class="type">
+										{{ note.type }}
+										<span (click)="editNote(note)"
+											><i
+												class="fa fa-edit"
+												aria-hidden="true"></i
+										></span>
+									</p>
+								</div>
+								}
+							</div>
+						</div>
+					</div>
+				</div>
+			</mat-tab>
+			}
+		</mat-tab-group>
+	</div>
+</div>

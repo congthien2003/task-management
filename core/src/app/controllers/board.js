@@ -1,8 +1,9 @@
-import boardRepository from "../repositories/boardRepository.js";
+import boardServices from "../services/boardServices.js";
 import Result from "../common/Result.js";
+
 const getAll = async function (req, res) {
 	try {
-		const listboard = await boardRepository.getAll();
+		const listboard = await boardServices.getAll();
 		res.status(200).json(
 			new Result(
 				{
@@ -19,7 +20,7 @@ const getAll = async function (req, res) {
 
 const getAllByIdUser = async function (req, res) {
 	try {
-		const listboard = await boardRepository.getAllByIdUser(
+		const listboard = await boardServices.getAllByIdUser(
 			req.params?.idUser
 		);
 		res.status(200).json({
@@ -38,7 +39,7 @@ const getAllByIdUser = async function (req, res) {
 
 const getById = async function (req, res) {
 	try {
-		const existsboard = await boardRepository.getById(req.params?.id);
+		const existsboard = await boardServices.getById(req.params?.id);
 		if (existsboard != null) {
 			res.status(200).json({
 				message: "success",
@@ -62,7 +63,7 @@ const getById = async function (req, res) {
 
 const getCoopboardByIdUser = async function (req, res) {
 	try {
-		const listboards = await boardRepository.getCoopboardByIdUser(
+		const listboards = await boardServices.getCoopBoardByIdUser(
 			req.params?.idUser
 		);
 		res.status(200).json({
@@ -73,7 +74,7 @@ const getCoopboardByIdUser = async function (req, res) {
 		});
 	} catch (exception) {
 		res.status(400).json({
-			message: "Error",
+			message: "Error" + exception,
 			data: {},
 		});
 	}
@@ -82,7 +83,7 @@ const getCoopboardByIdUser = async function (req, res) {
 const create = function (req, res) {
 	console.log(req.body);
 
-	const newboard = boardRepository.create(req.body);
+	const newboard = boardServices.create(req.body);
 
 	if (newboard != null) {
 		res.status(200).json({
@@ -100,8 +101,9 @@ const create = function (req, res) {
 };
 
 const addMembers = async function (req, res) {
-	const members = req.body?.members;
+	const members = req.body?.email;
 	const id = req.params?.id;
+	console.log(req.body);
 
 	if (members == undefined) {
 		return res.status(400).json({
@@ -110,7 +112,7 @@ const addMembers = async function (req, res) {
 		});
 	}
 
-	const board = await boardRepository.addMembers(id, members);
+	const board = await boardServices.addMembers(id, members);
 
 	if (board !== null) {
 		res.status(200).json({
@@ -138,7 +140,7 @@ const removeMembers = async function (req, res) {
 		});
 	}
 
-	const board = await boardRepository.removeMembers(id, members);
+	const board = await boardServices.removeMembers(id, members);
 
 	if (board !== null) {
 		res.status(200).json({
@@ -156,7 +158,7 @@ const removeMembers = async function (req, res) {
 };
 
 const updateById = async function (req, res) {
-	const update = await boardRepository.updateById(
+	const update = await boardServices.updateById(
 		req.params.id.trim(),
 		req.body
 	);
@@ -177,7 +179,7 @@ const updateById = async function (req, res) {
 };
 
 const deleteById = async function (req, res) {
-	const deleteSuccess = await boardRepository.deleteById(req.params?.id);
+	const deleteSuccess = await boardServices.deleteById(req.params?.id);
 	if (deleteSuccess) {
 		res.status(200).json({
 			message: "Delete successful",

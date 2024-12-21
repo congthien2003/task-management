@@ -8,7 +8,12 @@ export interface Task {
 	createdAt: Date;
 	updatedAt: Date;
 	createBy: string;
-	assignBy: string;
-	_idProject: string;
-	Attachments: Attachment[];
+	permitted: [
+		{
+			email: string;
+			_id: string;
+		}
+	];
+	listId: string;
+	attachments: Attachment[];
 }

@@ -1,0 +1,44 @@
+<div class="form">
+	<h4>Edit student</h4>
+	<form [formGroup]="form">
+		<div class="mb-3">
+			<label for="name" class="form-label">Name</label>
+			<input
+				type="text"
+				id="name"
+				class="form-control"
+				formControlName="name" />
+		</div>
+		<div class="mb-3">
+			<label for="age" class="form-label">Age</label>
+			<input
+				type="number"
+				class="form-control"
+				id="age"
+				formControlName="age" />
+		</div>
+		<div class="mb-3">
+			<label class="form-label" for="exampleCheck1">Avartar</label>
+
+			<input
+				type="file"
+				class="form-control"
+				(change)="onChangeFile($event)" />
+			@if (student.avartar) {
+			<img
+				width="100px"
+				height="100px"
+				src="http://localhost:3000/assets/images/{{ student.avartar }}"
+				alt="" />
+			}
+		</div>
+		<div class="actions">
+			<button (click)="onUpload()" mat-flat-button color="primary">
+				Update
+			</button>
+			<button (click)="cancel()" mat-stroked-button color="warn">
+				Cancel
+			</button>
+		</div>
+	</form>
+</div>
